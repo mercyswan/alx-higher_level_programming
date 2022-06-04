@@ -1,31 +1,56 @@
 #include "lists.h"
 
 /**
-  * is_palindrome - checks if a singly linked list is a palindrome
-  * @head: double pointer to list.
-  *
-  *Return: 1 if palindrome, 0 if not palindrom.
-  */
-int is_palindrome(listint_t **head)
+ * reverse_list - reverses a linked list
+ * @head: double pointer of the list
+ * Return: pointer to the first node of the reversed list
+ */
+
+listint_t *reverse_list(listint_t **head)
 {
-	return (checkPalindrome(head, *head));
+	listint_t *forward = NULL, *prev = NULL;
+
+	while (*head)
+	{
+		forward = (*head)->next;
+		(*head)->next = prev;
+		prev = (*head);
+		(*head) = forward;
+	}
+	(*head) = prev;
+	return (*head);
 }
 
 /**
-  * checkPalindrome - recursive function ot check if sinly linked list
-  * is a palindrome.
-  * @headptr: double pointer to list.
-  * @tptr: pointer to list.
-  *
-  * Return: 1 or 0
-  */
-int checkPalindrome(listint_t **headptr, listint_t *tptr)
-{
-	int res;
+ * is_palindrome - checks if a singly linked list is a palindrome
+ * @head: double pointer to the head of the list
+ * Return: 0 if it's not a palindrome, 1 if it is
+ */
 
-	/* base case */
-	if (tptr == NULL)
+int is_palindrome(listint_t **head)
+{
+	listint_t *single = *head, *dub = *head;
+
+	if (*head == NULL)
+	{
 		return (1);
-	res = checkPalindrome(headptr, tptr->next) && ((*headptr)->n == tptr->n);
-	return (res);
+	}
+	while (dub->next && dub->next->next)
+	{
+		single = single->next;
+		dub = dub->next->next;
+	}
+	single = reverse_list(&single);
+	dub = *head;
+	while (single && dub)
+	{
+		if (single->n != dub->n)
+		{
+			return (0);
+		}
+		single = single->next;
+		dub = dub->next;
+	}
+	return (1);
+
 }
