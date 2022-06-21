@@ -1,7 +1,10 @@
 0x05. Python - Exceptions
 =========================
 
--   By Guillaume
+
+BY MERCY SWANTA MUSA
+
+
 
 Resources
 ---------
