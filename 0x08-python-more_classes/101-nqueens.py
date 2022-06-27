@@ -1,68 +1,50 @@
 #!/usr/bin/python3
+"""Solves the N-queens puzzle.
 
+Determines all possible solutions to placing N
+N non-attacking queens on an NxN chessboard.
+
+Example:
+    $ ./101-nqueens.py N
+
+N must be an integer greater than or equal to 4.
+
+Attributes:
+    board (list): A list of lists representing the chessboard.
+    solutions (list): A list of lists containing solutions.
+
+Solutions are represented in the format [[r, c], [r, c], [r, c], [r, c]]
+where `r` and `c` represent the row and column, respectively, where a
+queen must be placed on the chessboard.
 """
-This is a module for N queens.
-"""
+import sys
 
-if __name__ == '__main__':
-
-    import sys
-
-    if len(sys.argv) != 2:
-        print("Usage: nqueens N")
-        sys.exit(1)
-    try:
-        size = int(sys.argv[1])
-    except BaseException:
-        print("N must be a number")
-        sys.exit(1)
-    if size < 4:
-        print("N must be at least 4")
-        sys.exit(1)
-
-    def startSolve():
-        b = [[0 for j in range(size)] for i in range(size)]
-        checkRecursive(b, 0)
-        return
-
-    def checkRecursive(b, c):
-        if (c == size):
-            solution(b)
-            return True
-        ret = False
-        for i in range(size):
-            if (checkPosition(b, i, c)):
-                b[i][c] = 1
-                ret = checkRecursive(b, c + 1) or ret
-                b[i][c] = 0
-        return ret
-
-    def checkPosition(b, r, c):
-        for i in range(c):
-            if (b[r][i]):
-                return False
-        i = r
-        j = c
-        while i >= 0 and j >= 0:
-            if(b[i][j]):
-                return False
-            i = i - 1
-            j = j - 1
-        i = r
-        j = c
-        while j >= 0 and i < size:
-            if(b[i][j]):
-                return False
-            i = i + 1
-            j = j - 1
-        return True
-
-    def solution(b):
-        solve = []
-        for i in range(size):
-            for j in range(size):
-                if(b[i][j] is 1):
-                    solve.append([i, j])
-        print(solve)
-        solve.clear()
-    startSolve()
+def solveNQueens(self, n: int) -> List[List[str]]:
+        moves = ((1, 2), (1, -2), (-1, 2), (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1))
+        
+        queue = deque()
+        
+        res = []
+        ans = []
+        for i in range(n):
+            queue.append((0, i, [(0, i)]))
+            diagonalR = set([0-i])
+            diagonalL = set([0+i])
+            visitedCol = set([i])
+            visitedRow = set([0])
+            while queue:
+                cr, cc, queens = queue.popleft()
+                for di, dj in moves:
+                    if len(queens) == n and queens not in ans:
+                        ans.append(queens)
+                        res.append(['.' * x[1] + 'Q' + '.' * (n-1-x[1]) for x in queens])
+                        continue
+                    if 0 <= cr + di < n and 0 <= cc + dj < n and cr + di not in visitedRow and cc + dj not in visitedCol and (cr + di) + (cc + dj) not in diagonalL and (cr + di) - (cc + dj) not in diagonalR:
+                        queens.append((cr + di, cc + dj))
+                        queue.append((cr + di, cc + dj, queens))
+                        visitedCol.add(cc + dj)
+                        visitedRow.add(cr + di)
+                        diagonalR.add((cr + di) - (cc + dj))
+                        diagonalL.add((cr + di) + (cc + dj))
+                        
+        return res
