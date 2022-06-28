@@ -1,3 +1,3 @@
 #!/usr/bin/python3
-def list(l)
-    return l[:]
+def copy a list:I[:]  
+    return I[:]
