@@ -1,33 +1,25 @@
 #!/usr/bin/python3
 """
-An element in the list is said to be peak if
-it is NOT smaller than its neighbors.
-For corner elements, we need to consider only one neighbor.
+a function that finds a peak in a list of unsorted integers.
 """
 
 
-def find_peak(A):
-    """find pick element"""
-    if A == []:
+def find_peak(list_of_integers):
+    """
+    Return a peak in a list of unsorted integers
+    """
+    if len(list_of_integers) == 0:
         return None
+    if len(list_of_integers) == 1:
+        return list_of_integers[0]
+    if len(list_of_integers) == 2:
+        return max(list_of_integers)
 
-    def recursive(A, left=0, right=len(A) - 1):
-        """helper recursive function"""
-
-        mid = (left + right) // 2
-
-        # check if the middle element is greater than its neighbors
-        if ((mid == 0 or A[mid - 1] <= A[mid]) and
-                (mid == len(A) - 1 or A[mid + 1] <= A[mid])):
-            return A[mid]
-
-        # If the left neighbor of `mid` is greater than the middle element,
-        # find the peak recursively in the left sublist
-        if mid - 1 >= 0 and A[mid - 1] > A[mid]:
-            return recursive(A, left, mid - 1)
-
-        # If the right neighbor of `mid` is greater than the middle element,
-        # find the peak recursively in the right sublist
-        return recursive(A, mid + 1, right)
-
-    return recursive(A)
+    mid = int(len(list_of_integers) / 2)
+    peak = list_of_integers[mid]
+    if peak > list_of_integers[mid - 1] and peak > list_of_integers[mid + 1]:
+        return peak
+    elif peak < list_of_integers[mid - 1]:
+        return find_peak(list_of_integers[:mid])
+    else:
+        return find_peak(list_of_integers[mid + 1:])
