@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 """
-changes the name of a State object from the database hbtn_0e_6_usa
+lists all City objects from the database hbtn_0e_101_usa
 """
 
 import sys
-from unicodedata import name
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from model_state import State
+from relationship_state import State
+from relationship_city import City
 
 if __name__ == "__main__":
     engine = create_engine("mysql+mysqldb://{}:{}@localhost/{}"
@@ -16,6 +16,7 @@ if __name__ == "__main__":
     session_maker = sessionmaker(bind=engine)
     session = session_maker()
 
-    state = session.query(State).filter_by(id=2).first()
-    state.name = "New Mexico"
-    session.commit()
+    for city in session.query(City).order_by(City.id).all():
+        print("{}: {} -> {}".format(city.id, city.name, city.state.name))
+    session.close()
+    engine.dispose()
