@@ -1,16 +1,11 @@
 #!/usr/bin/python3
-"""
-Prints different results of
-a request
-"""
-import urllib.request
-
+"""fetches https://intranet.hbtn.io/status"""
+from urllib import request
 
 if __name__ == "__main__":
-    url = "https://intranet.hbtn.io/status"
-    with urllib.request.urlopen(url) as response:
-        html = response.read()
+    with request.urlopen("https://intranet.hbtn.io/status") as response:
+        response = response.read()
         print("Body response:")
-        print("-\t type:", type(html))
-        print("-\t content:", html)
-        print("-\t utf8 content:", html.decode("utf-8"))
+        print("\t- type: {}".format(type(response)))
+        print("\t- content: {}".format(response))
+        print("\t- utf8 content: {}".format(response.decode(encoding='utf-8')))
